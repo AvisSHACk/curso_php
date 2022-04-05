@@ -79,7 +79,7 @@ class ControladorFormularios {
 
 				} else {
 
-					if($respuesta["intentos_fallidos"] < 3) {
+					if(is_array($respuesta) && 	$respuesta["intentos_fallidos"] < 3) {
 						$intentos_fallidos = $respuesta["intentos_fallidos"] + 1;
 
 						ModeloFormularios::mdlActualizarIntentosFallidos($tabla, $intentos_fallidos, $respuesta["token"]);
@@ -117,19 +117,17 @@ class ControladorFormularios {
 
 				$usuario = ModeloFormularios::mdlSeleccionarRegistros('registros', "token", $_POST["tokenUsuario"]);
 
-				$compararToken = md5($usuario["nombre"] . "+" . $usuario["email"]);
+				// echo "<pre>";
+				// print_r($_POST['tokenUsuario']);
+				// echo "</pre>";
 
-				echo "<pre>";
-				print_r($_POST['tokenUsuario']);
-				echo "</pre>";
+				// echo "<pre>";
+				// print_r($usuario["token"]);
+				// echo "</pre>";
 
-				echo "<pre>";
-				print_r($compararToken);
-				echo "</pre>";
+				if( $usuario["token"] == $_POST["tokenUsuario"]) {
 
-				if($compararToken == $_POST["tokenUsuario"] && $_POST["idUsuario"] == $usuario["id"]) {
-
-					echo "entro";
+					// echo "entro";
 					if($_POST["actualizarPassword"] !== "") {
 						if(preg_match('/^[0-9a-zA-Z]+$/', $_POST["actualizarPassword"])) {
 							$password = crypt($_POST["actualizarPassword"], '$2a$07$asxx54ahjppf45sd87a5a4dDDGsystemdev$');
@@ -139,17 +137,15 @@ class ControladorFormularios {
 						$password = $_POST["passwordActual"];
 					}
 
-					$actualizarToken = md5($_POST["actualizarNombre"] . "+" . $_POST["actualizarEmail"]);
+					// echo "entro";
 					
 					$tabla = "registros";
-					$datos = array(	"id" => $_POST["idUsuario"],
-									"token" => $actualizarToken,
+					$datos = array("token" => $_POST["tokenUsuario"],
 									"nombre" => $_POST["actualizarNombre"],
 									"email" => $_POST["actualizarEmail"],
 									"password" => $password);
 
 					$respuesta = ModeloFormularios::mdlActualizarRegistro($tabla, $datos);
-
 					return $respuesta;
 				} else {
 

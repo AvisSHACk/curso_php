@@ -1,4 +1,4 @@
-<div class="d-flex justify-content-center text-center">
+	<div class="d-flex justify-content-center text-center">
 	<form class="p-5 bg-light" method="post">
 
 		<div class="form-group">
@@ -9,7 +9,7 @@
 						<i class="fas fa-envelope"></i>
 					</span>
 				</div>
-				<input type="email" class="form-control" id="email" name="ingresoEmail">
+				<input type="email" class="form-control" name="ingresoEmail">
 			</div>
 		</div>
 
@@ -21,7 +21,7 @@
 						<i class="fas fa-lock"></i>
 					</span>
 				</div>
-				<input type="password" class="form-control" id="pwd" name="ingresoPassword">
+				<input type="password" class="form-control" name="ingresoPassword">
 			</div>
 		</div>
 

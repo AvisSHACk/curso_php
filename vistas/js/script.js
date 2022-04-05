@@ -1,4 +1,7 @@
 $("#email").change(function(){
+
+	$(".alert").remove();
+
 	let email = $(this).val();
 
 	let datos = new FormData();
@@ -11,8 +14,20 @@ $("#email").change(function(){
 		cache: false,
 		contentType: false,
 		processData: false,
+		dataType: "json",
 		success: function(respuesta){
-			console.log("respuesta", respuesta);
+			if(respuesta) {
+				$("#email").val("");
+
+				$("#email").parent().after(`
+					<div class="alert alert-warning">
+						<b>Error: </b>
+
+						El correo ya existe en la base de datos, por favor ingrese uno diferente
+					</div>
+				`);
+
+			}
 		}
 	})
 })

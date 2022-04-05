@@ -6,7 +6,7 @@
 		$usuario = ControladorFormularios::ctrlSeleccionarRegistros($item, $valor);
 
 	// 	echo "<pre>";
-	// print_r($usuario);
+	// print_r($valor);
 	// echo "</pre>";
 	}
 
@@ -22,7 +22,7 @@
 						<i class="fas fa-user"></i>
 					</span>
 				</div>
-				<input type="text" class="form-control" placeholder="Escriba su nombre" id="nombre" name="actualizarNombre" value="<?php echo $usuario["nombre"]?>">
+				<input type="text" class="form-control" placeholder="Escriba su nombre" id="actualizarNombre" name="actualizarNombre" value="<?php echo $usuario["nombre"]?>">
 			</div>
 		</div>
 
@@ -33,7 +33,7 @@
 						<i class="fas fa-envelope"></i>
 					</span>
 				</div>
-				<input type="email" class="form-control" placeholder="Escriba su email" id="email" name="actualizarEmail" value="<?php echo $usuario["email"] ?>">
+				<input type="email" class="form-control" placeholder="Escriba su email" id="actualizarEmail" name="actualizarEmail" value="<?php echo $usuario["email"] ?>">
 			</div>
 		</div>
 
@@ -47,7 +47,6 @@
 				<input type="password" class="form-control" placeholder="Escriba su password" id="pwd" name="actualizarPassword">
 				<input type="hidden" name="passwordActual" value="<?php echo $usuario["password"]?>">
 				<input type="hidden" name="tokenUsuario" value="<?php echo $usuario["token"]?>">
-				<input type="hidden" name="idUsuario" value="<?php echo $usuario["id"]?>">
 			</div>
 		</div>
 
@@ -55,21 +54,39 @@
 
 			$actualizar = ControladorFormularios::ctrActualizarRegistro();
 
+	// 		echo "<pre>";
+	// print_r($usuario);
+	// echo "</pre>";
+
 			if($actualizar == "ok") {
 				echo "<script>
 					if(window.history.replaceState) {
 						window.history.replaceState(null, null, window.location.href);
 					}
 
+					let datos = new FormData();
+					datos.append('validarToken', '". $usuario["token"] ."' );
+
+					$.ajax({
+						url: 'ajax/formularios.ajax.php',
+						method: 'POST',
+						data: datos,
+						cache: false,
+						contentType: false,
+						processData: false,
+						dataType: 'json',
+						success: function(respuesta){
+							console.log(respuesta)
+							$('#actualizarEmail').val(respuesta['email']);
+							$('#actualizarNombre').val(respuesta['nombre']);
+						}
+					});
+
+
 				</script>";
 
-				echo '<div class="alert alert-success">El usuario ha sido actualizado</div>
-
-					<script>
-						setTimeout(function(){
-							window.location = "index.php?pagina=inicio";
-							}, 3000)
-					</script>
+				echo '
+					<div class="alert alert-success">El usuario ha sido actualizado</div>
 
 
 				';
